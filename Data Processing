@@ -4,7 +4,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import csv
+import seaborn as sns; sns.set()
+from sklearn.decomposition import PCA
+
 %matplotlib inline
+
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Lasso, LogisticRegression
 from sklearn.feature_selection import SelectFromModel
@@ -14,6 +19,8 @@ from sklearn.preprocessing import StandardScaler
 data = pd.read_csv('C:/Users/kgpaz/Desktop/test.csv', index_col=0)
 data.shape
 
+# Data processing with Lasso reqularisation
+
 #Scaling the data, as linear models benefits from feature scaling
 scaler = StandardScaler()
 scaler.fit(data)
@@ -21,3 +28,16 @@ scaler.fit(data)
 #Selecting features using Lasso regularisation
 sel_ = SelectFromModel(LogisticRegression(C=1, penalty='l1'))
 data_new=sel_.transform(data)
+
+#Data processing with PCA method
+
+pca = PCA(.8)
+pca.fit(data)
+
+data_pca =pd.DataFrame(pca.transform(data))
+data_pca.head()
+
+#print the original and ytransformed shape
+print("original shape:   ", data.shape)
+print("transformed shape:", data_pca.shape)
+
