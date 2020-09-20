@@ -14,14 +14,6 @@ from sklearn.preprocessing import StandardScaler
 data = pd.read_csv('C:/Users/kgpaz/Desktop/test.csv', index_col=0)
 data.shape
 
-#seperate the training and test set 
-#X_train, X_test, y_train, y_test = train_test_split(
-#    data,
-#    data,
-#    test_size=0.3,
-#    random_state=0)
-#X_train.shape, X_test.shape
-
 #Scaling the data, as linear models benefits from feature scaling
 scaler = StandardScaler()
 scaler.fit(data)
