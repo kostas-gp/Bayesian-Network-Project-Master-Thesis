@@ -1,0 +1,231 @@
+import numpy as np
+import pandas as pd
+import csv
+import matplotlib.pyplot as plt
+
+#read the data 
+data = pd.read_csv('C:/Users/kgpaz/Desktop/test.csv', index_col=0)
+
+#add a new colomn in a dataset
+data['count'] = 1
+
+#select  random column from data
+data= data[['ASXL1','CBL','KIT','EZH2','KDM5A','STAG2','count']]
+#data.head()
+
+#create the pivot tables in order to compute the propabilities
+table_ASXL1=pd.pivot_table(
+    
+    data, 
+    values='count', 
+    columns=['ASXL1'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+table_CBL=pd.pivot_table(
+    
+    data, 
+    values='count', 
+    columns=['CBL'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+table_EZH2=pd.pivot_table(
+    
+    data, 
+    values='count', 
+    columns=['EZH2'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+table_KDM5A=pd.pivot_table(
+    
+    data, 
+    values='count', 
+    columns=['KDM5A'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+table_STAG2=pd.pivot_table(
+    
+    data, 
+    values='count', 
+    columns=['STAG2'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+
+
+table_ASXL1_CBL=pd.pivot_table(
+    
+    data, 
+    values='count', 
+    index=['CBL'], 
+    columns=['ASXL1'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+table_CBL_EZH2=pd.pivot_table(
+    data, 
+    values='count', 
+    index=['EZH2'], 
+    columns=['CBL'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+table_CBL_KDM5A=pd.pivot_table(
+    data, 
+    values='count', 
+    index=['CBL'], 
+    columns=['KDM5A'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+table_EZH2_KDM5A=pd.pivot_table(
+    data, 
+    values='count', 
+    index=['KDM5A'], 
+    columns=['EZH2'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+
+table_EZH2_STAG2=pd.pivot_table(
+    data, 
+    values='count', 
+    index=['STAG2'], 
+    columns=['EZH2'], 
+    aggfunc=np.size, 
+    fill_value=0
+)
+#compute the propabilities for each node
+P_ASXL1=table_ASXL1[0]/(table_ASXL1[0]+table_ASXL1[1])
+P_CBL=table_CBL[0]/(table_CBL[0]+table_CBL[1])
+P_EZH2=table_EZH2[0]/(table_EZH2[0]+table_EZH2[1])
+P_KDM5A=table_KDM5A[0]/(table_KDM5A[0]+table_KDM5A[1])
+P_STAG2=table_STAG2[0]/(table_STAG2[0]+table_STAG2[1])
+
+#compute the conditional propabilities in order to connect the nodes
+P_ASXL1_CBL=(table_ASXL1_CBL[1][1]/(table_ASXL1_CBL[1][0]+table_ASXL1_CBL[1][1]+table_ASXL1_CBL[0][1]+table_ASXL1_CBL[0][0]))/((table_ASXL1_CBL[1][0]+table_ASXL1_CBL[1][1])/(table_ASXL1_CBL[1][0]+table_ASXL1_CBL[1][1]+table_ASXL1_CBL[0][1]+table_ASXL1_CBL[0][0]))
+P_CBL_EZH2=(table_CBL_EZH2[1][1]/(table_CBL_EZH2[1][0]+table_CBL_EZH2[1][1]+table_CBL_EZH2[0][1]+table_CBL_EZH2[0][0]))/((table_CBL_EZH2[1][0]+table_CBL_EZH2[1][1])/(table_CBL_EZH2[1][0]+table_CBL_EZH2[1][1]+table_CBL_EZH2[0][1]+table_CBL_EZH2[0][0]))
+P_CBL_KDM5A=(table_CBL_KDM5A[1][1]/(table_CBL_KDM5A[1][0]+table_CBL_KDM5A[1][1]+table_CBL_KDM5A[0][1]+table_CBL_KDM5A[0][0]))/((table_CBL_KDM5A[1][0]+table_CBL_KDM5A[1][1])/(table_CBL_KDM5A[1][0]+table_CBL_KDM5A[1][1]+table_CBL_KDM5A[0][1]+table_CBL_KDM5A[0][0]))
+P_EZH2_KDM5A=(table_EZH2_KDM5A[1][1]/(table_EZH2_KDM5A[1][0]+table_EZH2_KDM5A[1][1]+table_EZH2_KDM5A[0][1]+table_EZH2_KDM5A[0][0]))/((table_EZH2_KDM5A[1][0]+table_EZH2_KDM5A[1][1])/(table_EZH2_KDM5A[1][0]+table_EZH2_KDM5A[1][1]+table_EZH2_KDM5A[0][1]+table_EZH2_KDM5A[0][0]))
+P_EZH2_STAG2=(table_EZH2_STAG2[1][1]/(table_EZH2_STAG2[1][0]+table_EZH2_STAG2[1][1]+table_EZH2_STAG2[0][1]+table_EZH2_STAG2[0][0]))/((table_EZH2_STAG2[1][0]+table_EZH2_STAG2[1][1])/(table_EZH2_STAG2[1][0]+table_EZH2_STAG2[1][1]+table_EZH2_STAG2[0][1]+table_EZH2_STAG2[0][0]))
+
+#print (table_ASXL1)
+#print(P_ASXL1)
+#print ('The conditional propability P(ASXL1/CBL)  is ',P_ASXL1_CBL)
+#print ('The conditional propability P(CBL/EZH2)   is ',P_CBL_EZH2)
+#print ('The conditional propability P(CBL/KDM5A)  is ',P_CBL_KDM5A)
+#print ('The conditional propability P(EZH2/KDM5A) is ',P_EZH2_KDM5A)
+#print ('The conditional propability P(EZH2/STAG2) is ',P_EZH2_STAG2)
+
+#create the nodes from BN
+from pybbn.graph.dag import Bbn
+from pybbn.graph.edge import Edge, EdgeType
+from pybbn.graph.jointree import EvidenceBuilder
+from pybbn.graph.node import BbnNode
+from pybbn.graph.variable import Variable
+from pybbn.pptc.inferencecontroller import InferenceController
+
+# create the nodes
+ASXL1 = BbnNode(Variable(0, 'ASXL1', ['0', '1']), [P_ASXL1, 1-P_ASXL1])
+CBL = BbnNode(Variable(1, 'CBL', ['0', '1']), [P_CBL, 1-P_CBL])
+EZH2 = BbnNode(Variable(2, 'EZH2', ['0', '1']), [P_EZH2, 1-P_EZH2])
+KDM5A = BbnNode(Variable(3, 'KDM5A', ['0', '1']), [P_KDM5A, 1-P_KDM5A])
+STAG2 = BbnNode(Variable(4, 'STAG2', ['0', '1']), [P_STAG2, 1-P_STAG2])
+
+ATRX= BbnNode(Variable(5, 'ATRX', ['0', '1']), [P_STAG2, 1-P_STAG2])
+
+CBLB= BbnNode(Variable(6, 'CBLB', ['0', '1']), [P_STAG2, 1-P_STAG2])
+BRAF= BbnNode(Variable(7, 'BRAF', ['0', '1']), [P_STAG2, 1-P_STAG2])
+CUX1= BbnNode(Variable(8, 'CUX1', ['0', '1']), [P_STAG2, 1-P_STAG2])
+ETV6= BbnNode(Variable(9, 'ETV6', ['0', '1']), [P_STAG2, 1-P_STAG2])
+GATA2= BbnNode(Variable(10, 'GATA2', ['0', '1']), [P_STAG2, 1-P_STAG2])
+JAK2= BbnNode(Variable(11, 'JAK2', ['0', '1']), [P_STAG2, 1-P_STAG2])
+SF1= BbnNode(Variable(9, 'SF1', ['0', '1']), [P_STAG2, 1-P_STAG2])
+RUNX1= BbnNode(Variable(10, 'RUNX1', ['0', '1']), [P_STAG2, 1-P_STAG2])
+PHF6= BbnNode(Variable(11, 'PHF6', ['0', '1']), [P_STAG2, 1-P_STAG2])
+MYC= BbnNode(Variable(12, 'MYC', ['0', '1']), [P_STAG2, 1-P_STAG2])
+MPL= BbnNode(Variable(13, 'MPL', ['0', '1']), [P_STAG2, 1-P_STAG2])
+PTEN= BbnNode(Variable(14, 'PTEN', ['0', '1']), [P_STAG2, 1-P_STAG2])
+plus21= BbnNode(Variable(15, 'plus21', ['0', '1']), [P_STAG2, 1-P_STAG2])
+
+minus7= BbnNode(Variable(16, 'minus7', ['0', '1']), [P_STAG2, 1-P_STAG2])
+t_8_21= BbnNode(Variable(17, 't_8_21', ['0', '1']), [P_STAG2, 1-P_STAG2])
+
+#add the nodes
+bbn = Bbn() \
+    .add_node(ATRX) \
+    .add_node(ASXL1) \
+    .add_node(CBL) \
+    .add_node(EZH2) \
+    .add_node(KDM5A) \
+    .add_node(STAG2) \
+    .add_node(CBLB) \
+    .add_node(BRAF) \
+    .add_node(CUX1) \
+    .add_node(ETV6) \
+    .add_node(GATA2) \
+    .add_node(JAK2) \
+    .add_node(SF1) \
+    .add_node(RUNX1) \
+    .add_node(PHF6) \
+    .add_node(MYC) \
+    .add_node(MPL) \
+    .add_node(PTEN) \
+    .add_node(plus21) \
+    .add_node(minus7) \
+    .add_node(t_8_21) \
+    .add_edge(Edge(ATRX, ASXL1, EdgeType.DIRECTED)) \
+    .add_edge(Edge(ATRX, EZH2, EdgeType.DIRECTED)) \
+    .add_edge(Edge(ATRX, KDM5A, EdgeType.DIRECTED)) \
+    .add_edge(Edge(ATRX, CBL, EdgeType.DIRECTED))\
+    .add_edge(Edge(ATRX, STAG2, EdgeType.DIRECTED))\
+    .add_edge(Edge(ASXL1, CBLB, EdgeType.DIRECTED))\
+    .add_edge(Edge(ASXL1, BRAF, EdgeType.DIRECTED))\
+    .add_edge(Edge(EZH2, CUX1, EdgeType.DIRECTED))\
+    .add_edge(Edge(EZH2, ETV6, EdgeType.DIRECTED))\
+    .add_edge(Edge(KDM5A, GATA2, EdgeType.DIRECTED))\
+    .add_edge(Edge(KDM5A, JAK2, EdgeType.DIRECTED))\
+    .add_edge(Edge(CBL, MYC, EdgeType.DIRECTED))\
+    .add_edge(Edge(CBL, MPL, EdgeType.DIRECTED))\
+    .add_edge(Edge(STAG2, PTEN, EdgeType.DIRECTED))\
+    .add_edge(Edge(STAG2, plus21, EdgeType.DIRECTED))\
+    .add_edge(Edge(CBLB, SF1, EdgeType.DIRECTED))\
+    .add_edge(Edge(BRAF, SF1, EdgeType.DIRECTED))\
+    .add_edge(Edge(CUX1, RUNX1, EdgeType.DIRECTED))\
+    .add_edge(Edge(ETV6, RUNX1, EdgeType.DIRECTED))\
+    .add_edge(Edge(GATA2, PHF6, EdgeType.DIRECTED))\
+    .add_edge(Edge(JAK2, PHF6, EdgeType.DIRECTED))\
+    .add_edge(Edge(MYC, minus7, EdgeType.DIRECTED))\
+    .add_edge(Edge(MPL, minus7, EdgeType.DIRECTED))\
+    .add_edge(Edge(PTEN, t_8_21, EdgeType.DIRECTED))\
+    .add_edge(Edge(plus21, t_8_21, EdgeType.DIRECTED))
+    
+    # draw the network
+    %matplotlib inline
+from pybbn.generator.bbngenerator import convert_for_drawing
+import matplotlib.pyplot as plt
+import networkx as nx
+import warnings
+
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore')
+    
+    graph = convert_for_drawing(bbn)
+    #pos = nx.nx_agraph.graphviz_layout(graph, prog='neato')
+
+    plt.figure(figsize=(40, 10))
+    plt.subplot(121) 
+    labels = dict([(k, node.variable.name) for k, node in bbn.nodes.items()])
+    nx.draw(graph,  with_labels=True, labels=labels)
+    plt.title('protein')
